@@ -1,11 +1,16 @@
 pipeline {
     agent any
     
+    tools {
+        maven 'Maven-3.9'
+        jdk 'JDK-21'
+    }
+    
     stages {
         stage('1️⃣ Clone Repository') {
             steps {
                 echo '📥 Clonage du repository Git...'
-                checkout scm
+                git branch: 'main', url: 'https://github.com/mohamed15032003/order.git'
                 echo '✅ Clonage terminé'
             }
         }
@@ -13,13 +18,7 @@ pipeline {
         stage('2️⃣ Build Project') {
             steps {
                 echo '🔨 Compilation du projet avec Maven...'
-                script {
-                    if (isUnix()) {
-                        sh 'mvn clean compile'
-                    } else {
-                        bat 'mvn clean compile'
-                    }
-                }
+                bat 'mvn clean compile'
                 echo '✅ Compilation réussie'
             }
         }
@@ -27,13 +26,7 @@ pipeline {
         stage('3️⃣ Test & Package') {
             steps {
                 echo '🧪 Tests et packaging...'
-                script {
-                    if (isUnix()) {
-                        sh 'mvn test package'
-                    } else {
-                        bat 'mvn test package'
-                    }
-                }
+                bat 'mvn test package'
                 echo '✅ Tests et packaging terminés'
             }
         }

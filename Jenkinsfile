@@ -1,11 +1,6 @@
 pipeline {
     agent any
     
-    tools {
-        maven 'Maven-3.9'
-        jdk 'JDK-21'
-    }
-    
     stages {
         stage('1️⃣ Clone Repository') {
             steps {
@@ -18,6 +13,11 @@ pipeline {
         stage('2️⃣ Build Project') {
             steps {
                 echo '🔨 Compilation du projet avec Maven...'
+                script {
+                    def mvnHome = tool name: 'Maven-3.9', type: 'maven'
+                    def javaHome = tool name: 'JDK-21', type: 'jdk'
+                    env.PATH = "${mvnHome}\\bin;${javaHome}\\bin;${env.PATH}"
+                }
                 bat 'mvn clean compile'
                 echo '✅ Compilation réussie'
             }
